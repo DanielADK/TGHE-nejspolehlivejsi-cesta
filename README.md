@@ -1,55 +1,36 @@
-**# Zadání práce
-## Dodávky elektřiny
-Model elektrické rozvodné sítě je tvořen elektrárnami $0, \dots, n_e-1$
-a rozvodnami $n_e, \dots, n_e + n_r-1$. Tyto přípojné body jsou propojeny sítí $n_v$
-vodičů. Jeden vodič vždy spojuje právě dva přípojné body a má definovaný maximální výkon, který jím může být přenášen (v obou směrech stejný). Žádné dvě elektrárny nejsou přímo propojeny a pro každou je znám její výkon. Elektrárny jsou napojeny libovolně na rozvodny. Rozvodny mohou být propojovány libovolně mezi sebou.
-
-Pro stavbu nové výrobní linky bylo vytipováno $N$ lokalit. Pro každou lokalitu $i=1,\dots ,N$
-bylo navrženo $0 < k_i \le 3$
-nezávislých elektrických přípojek napojených na přípojné body $r_{i,1}, \dots r_{i,k_i}$ 
-. Navrhněte a implementujte algoritmus, který pro každou lokalitu určí maximální dostupný elektrický příkon.
-
-### Popis vstupu a výstupu
-Na prvním řádku vstupu jsou tři přirozená čísla udávající:
-
-- počet elektráren $n_e$
-- počet rozvoden $n_r$
-- počet vodičů $n_v$
-Na dalších $n_e$ řádcích jsou výkony elektráren.
-
-Na dalších $n_v$ řádcích je specifikace vodičů. Na jednom řádku jsou vždy tři přirozená čísla udávající postupně:
-
-- index prvního
-- index druhého propojeného přípojného bodu
-maximální přenášený výkon
-- Výkony elektráren a kapacity vodičů jsou přirozená čísla menší než 1000.
-
-Následuje počet lokalit $N$
-na samostatném řádku. Na každém z následujících $N$
-řádků je seznam přípojných bodů pro navržené elektrické přípojky (maximálně 3). Na výstupu programu bude $N$
-řádků, na každém maximální dostupný výkon pro odpovídající lokalitu.
-
-- Formulujte úlohu jako vhodnou grafovou úlohu. Co jsou vrcholy, hrany?
-- Pro příslušný grafový problém zvolte algoritmus, který bude mít nejvýše složitost $O(n^2 n_v)$
+# Zadání
+## Nejspolehlivější cesta
+Máme rozlehlou počítačovou síť, která je realizována rádiovým spojením mezi stanicemi očíslovanými $0$
+až $n-1$. Rádiové spojení může být nejrůznějším způsobem rušeno a tudíž má omezenou spolehlivost. Rádiové spojení je pro vybrané dvojice stanic dáné: číslem $i$
+vysílající stanice, číslem $j$
+přijímajícé stanice a pravděpodobností $0<p_{i,j}<1$
+přijmutí správného paketu. Spojení mezi dvěma stanicemi je symetrické. Najděte v zadané síti nejspolehlivější spojení z vrcholu $s$
+do vrcholu $t$
 .
-- Zvojený algoritmus implementujte.
-### Příklad vstupu
+
+## Popis vstupu a výstupu
+Na prvním řádku vstupu je počet stanic $n$
+a celkový počet spojení mezi nimi, $m$
+. Na dalších $m$
+řádkcích je pro každé elementární spojení číslo vysílajícího uzlu, číslo přijímajícího uzlu (číslováno od 0) a pravděpodobnost $p$
+(např. 0.8931). Na řádku $m+2$
+je počet testovacích dotazů $N$
+a na dalších $N$
+řádcích jsou data pro jednotlivé dotazy. Jeden dotaz je dvojice stanic, mezi kterými chceme najít spojení, první je index počátečního a druhý index koncového uzlu.
+
+Na výstupu bude $N$
+řádků, pro každý dotaz jeden. Výsledek jednoho dotazu je posloupnost indexů stanic nalezeného nejspolehlivějšího spojení včetně počáteční a koncové stanice ze zadání dotazu. V případě, že žádné spojení pro dotaz neexistuje, vypíše se pouze index počátečního uzlu ze zadání dotazu.
+
+## Příklad vstupu
 ```
-2 3 4
-4
-4
-0 4 6
-1 4 5
-4 2 4
-4 3 7
-3
-2
-3
-2 3
+3 3
+0 1 0.8
+0 2 0.5
+1 2 0.7
+1
+0 2
 ```
-### Očekávaný výstup
+## Očekávaný výstup
 ```
-4
-7
-8
+0 1 2
 ```
