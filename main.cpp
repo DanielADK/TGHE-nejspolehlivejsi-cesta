@@ -1,42 +1,50 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include "CPriorityQueue.cpp"
 using namespace std;
 
 const int MAXN = 1000;
 double graph[MAXN][MAXN];
 int parent[MAXN];
 
+// Dijkstra algorithm for finding most reliable path from start to end node
 vector<int> dijkstra(int n, int start, int end) {
+    // initialize vectors
     vector<double> dist(n, 0);
     vector<int> path;
 
     // priority queue sorted in descending order
-    priority_queue<pair<double, int>> pq;
-
-    pq.emplace(1.0, start);
+    PriorityQueue<pair<double, int>> pq;
+    pq.push({1.0, start});
 
     while (!pq.empty()) {
+        // get node with highest probability
         int u = pq.top().second;
         double p = pq.top().first;
         pq.pop();
 
-        if (u == end)
-            break;
+        // if end node is reached, break
+        if (u == end) break;
+
         double w, new_p;
+        // go through all neighbors
         for (int v = 0; v < n; v++) {
             if (graph[u][v] > 0) {
+                // calculate new probability
                 w = graph[u][v];
                 new_p = p * w;
+                // if new probability is higher than current, update distance and add to queue
                 if (new_p > dist[v]) {
                     dist[v] = new_p;
                     parent[v] = u;
-                    pq.emplace(new_p, v);
+                    pq.push({new_p, v});
                 }
             }
         }
     }
 
+    // if end node was not reached, return start node
     if (dist[end] == 0) {
         path.push_back(start);
         return path;
@@ -50,6 +58,7 @@ vector<int> dijkstra(int n, int start, int end) {
     }
     path.push_back(start);
 
+    // reverse path so it is in correct order
     reverse(path.begin(), path.end());
     return path;
 }
@@ -82,6 +91,7 @@ int main() {
 
         vector<int> path = dijkstra(n, start, end);
 
+        // output path
         for (int i : path)
             cout << i << " ";
         cout << endl;
@@ -89,4 +99,3 @@ int main() {
 
     return 0;
 }
-
