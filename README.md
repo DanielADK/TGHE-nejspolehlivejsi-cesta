@@ -1,4 +1,4 @@
-# Zadání práce
+**# Zadání práce
 ## Dodávky elektřiny
 Model elektrické rozvodné sítě je tvořen elektrárnami $0, \dots, n_e-1$
 a rozvodnami $n_e, \dots, n_e + n_r-1$. Tyto přípojné body jsou propojeny sítí $n_v$
@@ -34,6 +34,7 @@ na samostatném řádku. Na každém z následujících $N$
 .
 - Zvojený algoritmus implementujte.
 ### Příklad vstupu
+```
 2 3 4
 4
 4
@@ -45,7 +46,10 @@ na samostatném řádku. Na každém z následujících $N$
 2
 3
 2 3
+```
 ### Očekávaný výstup
+```
 4
 7
 8
+```
