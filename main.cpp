@@ -1,11 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <string.h>
+#include <stdio.h>
 #include "CPriorityQueue.cpp"
 using namespace std;
 
-const int MAXN = 1000;
-double graph[MAXN][MAXN];
-int parent[MAXN];
+double **graph;
+int *parent;
 
 // Dijkstra algorithm for finding most reliable path from start to end node
 vector<int> dijkstra(int n, int start, int end) {
@@ -67,9 +68,14 @@ int main() {
     cin >> n >> m;
 
     // initialize graph
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
+    parent = new int[n];
+    graph = new double *[n];
+    for (int i = 0; i < n; i++) {
+        graph[i] = new double[n];
+        for (int j = 0; j < n; j++) {
             graph[i][j] = 0;
+        }
+    }
 
     // read graph
     for (int i = 0; i < m; i++) {
@@ -95,6 +101,11 @@ int main() {
             cout << i << " ";
         cout << endl;
     }
+
+    for (int i = 0; i < n; i++)
+        delete [] graph[i];
+    delete [] graph;
+    delete [] parent;
 
     return 0;
 }
