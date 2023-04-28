@@ -1,12 +1,36 @@
 #include <iostream>
-#include <vector>
-#include <string.h>
-#include <stdio.h>
+#include <iterator>
 #include "CPriorityQueue.cpp"
 using namespace std;
 
 double **graph;
 int *parent;
+
+
+/**
+ * @brief      Reverse the order of elements in the range [first, last)
+ *
+ * The function accepts a range of elements specified by input iterators
+ * `first` and `last`, and reverses the order of the elements in the range.
+ * This implementation works with general iterators and uses C++ templates.
+ *
+ * @tparam     Iterator  The type of the input iterators
+ * @param[in]  first     An iterator pointing to the first element in the range
+ * @param[in]  last      An iterator pointing one past the last element in the range
+ *
+ * Usage:
+ *
+ *     std::vector<int> nums = {1, 2, 3, 4, 5};
+ *     reverse(nums.begin(), nums.end());
+ *     // nums now contains: 5 4 3 2 1
+ */
+template <typename Iterator>
+void reverse_vector(Iterator first, Iterator last) {
+    while ((first != last) && (first != --last)) {
+        std::iter_swap(first, last);
+        ++first;
+    }
+}
 
 // Dijkstra algorithm for finding most reliable path from start to end node
 vector<int> dijkstra(int n, int start, int end) {
@@ -59,7 +83,8 @@ vector<int> dijkstra(int n, int start, int end) {
     path.push_back(start);
 
     // reverse path so it is in correct order
-    reverse(path.begin(), path.end());
+    //reverse(path.begin(), path.end());
+    reverse_vector(path.begin(), path.end());
     return path;
 }
 

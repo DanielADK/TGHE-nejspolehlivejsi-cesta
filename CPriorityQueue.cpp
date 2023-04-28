@@ -56,10 +56,10 @@ private:
         int l = left(index);
         int r = right(index);
 
-        if (l < heap.size() && heap[l].first > heap[largest].first)
+        if (l < (int)heap.size() && heap[l].first > heap[largest].first)
             largest = l;
 
-        if (r < heap.size() && heap[r].first > heap[largest].first)
+        if (r < (int)heap.size() && heap[r].first > heap[largest].first)
             largest = r;
 
         if (largest != index) {
