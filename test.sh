@@ -13,6 +13,9 @@ do
 
 	./a.out < "$IN_FILE" > my_out.txt
 
+	# Odstraň mezery na konci řádků v souboru my_out.txt
+	sed -i 's/[[:space:]]*$//' my_out.txt
+
 	if ! diff "$REF_FILE" my_out.txt > temp.txt
 	then
 		printf "\e[0;31mFail: %s\e[0m\n" "$IN_FILE"
