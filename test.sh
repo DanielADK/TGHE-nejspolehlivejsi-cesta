@@ -9,14 +9,14 @@ TEST_DIR="test/"
 for IN_FILE in ${TEST_DIR}*_IN.txt
 do
 	now=$(date +%s)sec
-	REF_FILE=$(echo -n $IN_FILE | sed -e 's/_in\(.*\)$/_out\1/')
+	REF_FILE=$(echo -n "$IN_FILE" | sed -e 's/_IN\(.*\)$/_OUT\1/')
 
 	./a.out < "$IN_FILE" > my_out.txt
 
-	if ! diff $REF_FILE my_out.txt > temp.txt
+	if ! diff "$REF_FILE" my_out.txt > temp.txt
 	then
 		printf "\e[0;31mFail: %s\e[0m\n" "$IN_FILE"
-		cat temp.txt
+		head -n 5 temp.txt
 		# echo "Vstupni data:"
 		# echo `cat "$IN_FILE"`
 		# exit
