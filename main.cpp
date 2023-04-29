@@ -109,3 +109,26 @@ int main() {
 
     return 0;
 }
+/*
+ * Využil jsem ChatGPT (chat.openai.com) pro:
+ * 1) Optimalizaci. Nejdříve jsem udržoval graf ve formě pole typu double (double**).
+ *      Dotaz: Lze toto řešení ještě nějak zrychlit? **KOPIE KÓDU**
+ *      AI navrhla:
+ *      - uklávání grafu do vektoru, protože graf může být velmi řídký. (pozn. toto nám bylo zmiňováno i v rámci předmětu
+ *        SEM2 u práce s maticemi a jak funguje vnitřně MATLAB. Toto jsem si avšak uvědomil, až mi to AI řekla.).
+ *      - využití místo vlastní implementace prioritní fronty využít knihovní v <queue>. Binární je též (jako má impl.)
+ *       a měla by být více optimalizovaná.
+ *      - využití místo vlastní implementace reverse(iterator, iterator) knihovní v <algorithm>
+ *
+ * 2) Překlad komentářů v angličtině do češtiny
+ *      Dotaz: Přelož mi komentáře v kódu do češtiny
+ *      Důvod: Osobně to považuji v rámci této školní úlohy za lepší v rámci srozumitelnosti. Využití AI kvůli mé
+ *      lenosti a úspoře času.
+ *
+ * 3) Zjištění důvodu, proč mi program u úloh RELCONN_6 a dále v počítači vyhazuje SIGSEGV.
+ *      Dotaz: Mám vzorová data, tady kód **KOPIE KÓDU**. Proč mi program vyhazuje SIGSEGV?
+ *      AI navrhla:
+ *      - spoustu ověření (formou if()...), zda-li je každý přístup k dat. struktuře apod. možný, avšak většina
+ *      byla nesmyslná a musel jsem sám přijít na to, že vstupní soubory, které jsou dostupné od Code Criticu nejsou
+ *      kompletní.
+ */
