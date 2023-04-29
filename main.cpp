@@ -57,7 +57,7 @@ vector<int> dijkstra(int n, int start, int end) {
 
     // Pokud cílový uzel nebyl dosažen, vrátíme cestu obsahující pouze startovní uzel.
     if (dist[end] == 0) {
-        path.push_back(start);
+        path.emplace_back(start);
         return path;
     }
 
