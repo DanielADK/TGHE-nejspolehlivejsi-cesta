@@ -67,7 +67,7 @@ vector<int> dijkstra(int n, int start, int end) {
         path.push_back(v);
         v = parent[v];
     }
-    path.push_back(start);
+    path.emplace_back(start);
 
     // Obrácení cesty, aby byla ve správném pořadí.
     std::reverse(path.begin(), path.end());
