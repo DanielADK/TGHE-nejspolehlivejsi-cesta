@@ -1,80 +1,59 @@
 #include <iostream>
-#include <iterator>
-#include "CPriorityQueue.cpp"
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <unordered_map>
 using namespace std;
 
-double **graph;
-int *parent;
+// Graf je reprezentován jako seznam sousedství pomocí vektoru dvojic (uzel, váha).
+// Tato reprezentace je efektivní pro řídké grafy, protože prochází pouze existující sousedy.
+vector<vector<pair<int, double>>> graph;
 
+// Vektor 'parent' ukládá rodičovské uzly pro každý uzel při hledání nejspolehlivější cesty.
+vector<int> parent;
 
-/**
- * @brief      Reverse the order of elements in the range [first, last)
- *
- * The function accepts a range of elements specified by input iterators
- * `first` and `last`, and reverses the order of the elements in the range.
- * This implementation works with general iterators and uses C++ templates.
- *
- * @tparam     Iterator  The type of the input iterators
- * @param[in]  first     An iterator pointing to the first element in the range
- * @param[in]  last      An iterator pointing one past the last element in the range
- *
- * Usage:
- *
- *     std::vector<int> nums = {1, 2, 3, 4, 5};
- *     reverse(nums.begin(), nums.end());
- *     // nums now contains: 5 4 3 2 1
- */
-template <typename Iterator>
-void reverse_vector(Iterator first, Iterator last) {
-    while ((first != last) && (first != --last)) {
-        std::iter_swap(first, last);
-        ++first;
-    }
-}
-
-// Dijkstra algorithm for finding most reliable path from start to end node
+// Dijkstrův algoritmus pro nalezení nejspolehlivější cesty od startovního uzlu k cílovému uzlu.
 vector<int> dijkstra(int n, int start, int end) {
-    // initialize vectors
+    // Vektor 'dist' udržuje nejvyšší pravděpodobnost dosažení každého uzlu z počátečního uzlu.
     vector<double> dist(n, 0);
+
+    // Vektor 'path' ukládá vypočítanou nejspolehlivější cestu.
     vector<int> path;
 
-    // priority queue sorted in descending order
-    PriorityQueue<pair<double, int>> pq;
-    pq.push({1.0, start});
+    // Priority queue 'pq' udržuje uzly seřazené podle klesající pravděpodobnosti.
+    priority_queue<pair<double, int>> pq;
+    pq.emplace(1.0, start);
 
     while (!pq.empty()) {
-        // get node with highest probability
         int u = pq.top().second;
         double p = pq.top().first;
         pq.pop();
 
-        // if end node is reached, break
         if (u == end) break;
 
         double w, new_p;
-        // go through all neighbors
-        for (int v = 0; v < n; v++) {
-            if (graph[u][v] > 0) {
-                // calculate new probability
-                w = graph[u][v];
-                new_p = p * w;
-                // if new probability is higher than current, update distance and add to queue
-                if (new_p > dist[v]) {
-                    dist[v] = new_p;
-                    parent[v] = u;
-                    pq.push({new_p, v});
-                }
+        // Procházení všech sousedů uzlu 'u'.
+        for (const auto &neighbor : graph[u]) {
+            int v = neighbor.first;
+            w = neighbor.second;
+            new_p = p * w;
+
+            // Aktualizace vzdálenosti a přidání do priority queue, pokud je nová pravděpodobnost vyšší než současná.
+            if (new_p > dist[v]) {
+                dist[v] = new_p;
+                parent[v] = u;
+                pq.emplace(new_p, v);
             }
         }
     }
 
-    // if end node was not reached, return start node
+    // Pokud cílový uzel nebyl dosažen, vrátíme cestu obsahující pouze startovní uzel.
     if (dist[end] == 0) {
         path.push_back(start);
         return path;
     }
 
-    // construct path from end to start
+    // Konstrukce cesty od cílového uzlu k startovnímu uzlu.
     int v = end;
     while (v != start) {
         path.push_back(v);
@@ -82,55 +61,43 @@ vector<int> dijkstra(int n, int start, int end) {
     }
     path.push_back(start);
 
-    // reverse path so it is in correct order
-    //reverse(path.begin(), path.end());
-    reverse_vector(path.begin(), path.end());
+    // Obrácení cesty, aby byla ve správném pořadí.
+    std::reverse(path.begin(), path.end());
     return path;
 }
-
 int main() {
     int n, m, N;
     cin >> n >> m;
 
-    // initialize graph
-    parent = new int[n];
-    graph = new double *[n];
-    for (int i = 0; i < n; i++) {
-        graph[i] = new double[n];
-        for (int j = 0; j < n; j++) {
-            graph[i][j] = 0;
-        }
-    }
+    // Inicializace grafu a vektoru rodičovských uzlů.
+    parent.resize(n);
+    graph.resize(n);
 
-    // read graph
+    // Načtení hran grafu.
     for (int i = 0; i < m; i++) {
         int u, v;
         double w;
         cin >> u >> v >> w;
-        // symmetrical graph
-        graph[u][v] = w;
-        graph[v][u] = w;
+        // Přidání hran (u, v) a (v, u) do grafu s váhou w.
+        graph[u].emplace_back(v, w);
+        graph[v].emplace_back(u, w);
     }
 
     cin >> N;
 
-    // process queries
+    // Zpracování dotazů.
     while (N--) {
         int start, end;
         cin >> start >> end;
 
+        // Hledání nejspolehlivější cesty mezi startovním a cílovým uzlem.
         vector<int> path = dijkstra(n, start, end);
 
-        // output path
+        // Výpis nalezené cesty.
         for (int i : path)
             cout << i << " ";
         cout << endl;
     }
-
-    for (int i = 0; i < n; i++)
-        delete [] graph[i];
-    delete [] graph;
-    delete [] parent;
 
     return 0;
 }
