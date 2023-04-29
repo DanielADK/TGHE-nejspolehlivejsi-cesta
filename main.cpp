@@ -5,16 +5,24 @@
 #include <unordered_map>
 using namespace std;
 
-unordered_map<int, unordered_map<int, double>> graph;
+// Graf je reprezentován jako seznam sousedství pomocí vektoru dvojic (uzel, váha).
+// Tato reprezentace je efektivní pro řídké grafy, protože prochází pouze existující sousedy.
+vector<vector<pair<int, double>>> graph;
+
+// Vektor 'parent' ukládá rodičovské uzly pro každý uzel při hledání nejspolehlivější cesty.
 vector<int> parent;
 
 // Dijkstrův algoritmus pro nalezení nejspolehlivější cesty od startovního uzlu k cílovému uzlu.
 vector<int> dijkstra(int n, int start, int end) {
     // Vektor 'dist' udržuje nejvyšší pravděpodobnost dosažení každého uzlu z počátečního uzlu.
     vector<double> dist(n, 0);
+    // Udržení vektoru navštívených bodů pro optimalizaci
+    vector<bool> visited(n, false);
 
     // Vektor 'path' ukládá vypočítanou nejspolehlivější cestu.
     vector<int> path;
+    // Rezervování paměti pro optimalizaci
+    path.reserve(n);
 
     // Priority queue 'pq' udržuje uzly seřazené podle klesající pravděpodobnosti.
     priority_queue<pair<double, int>> pq;
@@ -24,6 +32,10 @@ vector<int> dijkstra(int n, int start, int end) {
         int u = pq.top().second;
         double p = pq.top().first;
         pq.pop();
+
+        // Oveření již navštíveného vrcholu
+        if (visited[u]) continue;
+        visited[u] = true;
 
         if (u == end) break;
 
@@ -65,8 +77,9 @@ int main() {
     int n, m, N;
     cin >> n >> m;
 
-    // Inicializace vektoru rodičovských uzlů.
+    // Inicializace grafu a vektoru rodičovských uzlů.
     parent.resize(n);
+    graph.resize(n);
 
     // Načtení hran grafu.
     for (int i = 0; i < m; i++) {
@@ -74,8 +87,8 @@ int main() {
         double w;
         cin >> u >> v >> w;
         // Přidání hran (u, v) a (v, u) do grafu s váhou w.
-        graph[u][v] = w;
-        graph[v][u] = w;
+        graph[u].emplace_back(v, w);
+        graph[v].emplace_back(u, w);
     }
 
     cin >> N;
