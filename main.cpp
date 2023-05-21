@@ -41,9 +41,9 @@ vector<int> dijkstra(int n, int start, int end) {
 
         double w, new_p;
         // Procházení všech sousedů uzlu 'u'.
-        for (const auto &neighbor : graph[u]) {
-            int v = neighbor.first;
-            w = neighbor.second;
+        for (const auto [first, second] : graph[u]) {
+            int v = first;
+            w = second;
             new_p = p * w;
 
             // Aktualizace vzdálenosti a přidání do priority queue, pokud je nová pravděpodobnost vyšší než současná.
@@ -70,11 +70,13 @@ vector<int> dijkstra(int n, int start, int end) {
     path.emplace_back(start);
 
     // Obrácení cesty, aby byla ve správném pořadí.
-    std::reverse(path.begin(), path.end());
+    std::ranges::reverse(path);
     return path;
 }
 int main() {
-    int n, m, N;
+    int n;
+    int m;
+    int N;
     cin >> n >> m;
 
     // Inicializace grafu a vektoru rodičovských uzlů.
